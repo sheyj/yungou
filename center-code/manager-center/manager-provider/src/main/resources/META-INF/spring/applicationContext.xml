@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+	http://www.springframework.org/schema/task 
+	http://www.springframework.org/schema/task/spring-task-3.2.xsd
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-3.2.xsd
+    http://www.springframework.org/schema/data/mongo
+    http://www.springframework.org/schema/data/mongo/spring-mongo-1.5.xsd   ">
+
+	<context:property-placeholder
+		ignore-unresolvable="true" ignore-resource-not-found="true"
+		system-properties-mode="NEVER"
+		location="file:D:\yungou\config\center\manager-center\application.properties" />
+	<!-- Linux 版本的配置，务必不能删除 -->
+	<context:property-placeholder
+		ignore-unresolvable="true" ignore-resource-not-found="true"
+		system-properties-mode="NEVER"
+		location="file:/etc/yungouconf/center/manager-center/application.properties" />
+	
+	<context:component-scan base-package="com.yungou.o2o.center.manager.provider" />
+		
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass" value="${jdbc.driver}" />
+		<property name="jdbcUrl" value="${jdbc.url}" />
+		<property name="user" value="${jdbc.username}" />
+		<!-- <property name="password" value="${jdbc.password}" /> -->
+		<property name="password">
+			<bean class="com.yungou.o2o.center.common.tools.DatasourcePropertiesFactory"
+				factory-method="getPassword">
+				<constructor-arg type="java.lang.String" name="pwd">
+					<value>${jdbc.password}</value>
+				</constructor-arg>
+				<constructor-arg type="java.lang.String" name="production">
+					<value>${jdbc.production}</value>
+				</constructor-arg>
+			</bean>
+		</property>
+		<property name="minPoolSize" value="${jdbc.miniPoolSize}" />
+		<property name="maxPoolSize" value="${jdbc.maxPoolSize}" />
+		<property name="initialPoolSize" value="${jdbc.initialPoolSize}" />
+		<property name="maxIdleTime" value="${jdbc.maxIdleTime}" />
+		<property name="acquireIncrement" value="${jdbc.acquireIncrement}" />
+		<property name="acquireRetryDelay" value="1000"></property>  
+   		<property name="acquireRetryAttempts" value="10"></property>  
+    	<property name="breakAfterAcquireFailure" value="false"></property>
+    	<property name="testConnectionOnCheckout" value="false"></property>
+		<property name="idleConnectionTestPeriod" value="300"></property>
+		<property name="preferredTestQuery"><value>select 1</value></property> 
+	</bean>
+
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation"
+			value="classpath:META-INF/mybatis/mybatis-manager-center-config.xml" />
+	</bean>
+
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage"
+			value="com.yungou.o2o.center.manager.provider.dal.database" />
+		<property name="sqlSessionTemplateBeanName" value="sqlSessionTemplate" />
+	</bean>
+
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<tx:annotation-driven transaction-manager="transactionManager"
+		order="2" />
+	
+	<!-- Redis 相关的配置 start -->
+	<bean name="poolConfig" class="redis.clients.jedis.JedisPoolConfig" />
+	<bean name="redisPool" class="redis.clients.jedis.JedisPool"
+		destroy-method="destroy">
+		<constructor-arg name="poolConfig" ref="poolConfig" />
+		<constructor-arg name="host" value="${redis.server.ip}" />
+		<constructor-arg name="port" value="${redis.server.port}" />
+	</bean>
+	<bean name="redisTemplate" class="com.yungou.o2o.redis.common.RedisTemplate">
+		<property name="redisPool" ref="redisPool" />
+	</bean>
+
+</beans>

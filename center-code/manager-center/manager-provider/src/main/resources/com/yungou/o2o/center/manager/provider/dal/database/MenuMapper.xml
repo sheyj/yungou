@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yungou.o2o.center.manager.provider.dal.database.MenuMapper" >
+  <resultMap id="BaseResultMap" type="com.yungou.o2o.center.manager.model.Menu" >
+    <id column="menu_id" property="menuId" jdbcType="VARCHAR" />
+    <result column="menu_name" property="menuName" jdbcType="VARCHAR" />
+    <result column="parent_id" property="parentId" jdbcType="VARCHAR" />
+    <result column="menu_type" property="menuType" jdbcType="SMALLINT" />
+    <result column="menu_url" property="menuUrl" jdbcType="VARCHAR" />
+    <result column="menu_sort" property="menuSort" jdbcType="INTEGER" />
+    <result column="menu_flag" property="menuFlag" jdbcType="SMALLINT" />
+    <result column="menu_remark" property="menuRemark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    menu_id, menu_name, parent_id, menu_type, menu_url, menu_sort, menu_flag, menu_remark
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from system_menu
+    where menu_id = #{menuId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from system_menu
+    where menu_id = #{menuId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.yungou.o2o.center.manager.model.Menu" >
+    insert into system_menu (menu_id, menu_name, parent_id, 
+      menu_type, menu_url, menu_sort, 
+      menu_flag, menu_remark)
+    values (#{menuId,jdbcType=VARCHAR}, #{menuName,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, 
+      #{menuType,jdbcType=SMALLINT}, #{menuUrl,jdbcType=VARCHAR}, #{menuSort,jdbcType=INTEGER}, 
+      #{menuFlag,jdbcType=SMALLINT}, #{menuRemark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yungou.o2o.center.manager.model.Menu" >
+    insert into system_menu
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="menuId != null" >
+        menu_id,
+      </if>
+      <if test="menuName != null" >
+        menu_name,
+      </if>
+      <if test="parentId != null" >
+        parent_id,
+      </if>
+      <if test="menuType != null" >
+        menu_type,
+      </if>
+      <if test="menuUrl != null" >
+        menu_url,
+      </if>
+      <if test="menuSort != null" >
+        menu_sort,
+      </if>
+      <if test="menuFlag != null" >
+        menu_flag,
+      </if>
+      <if test="menuRemark != null" >
+        menu_remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="menuId != null" >
+        #{menuId,jdbcType=VARCHAR},
+      </if>
+      <if test="menuName != null" >
+        #{menuName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="menuType != null" >
+        #{menuType,jdbcType=SMALLINT},
+      </if>
+      <if test="menuUrl != null" >
+        #{menuUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="menuSort != null" >
+        #{menuSort,jdbcType=INTEGER},
+      </if>
+      <if test="menuFlag != null" >
+        #{menuFlag,jdbcType=SMALLINT},
+      </if>
+      <if test="menuRemark != null" >
+        #{menuRemark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yungou.o2o.center.manager.model.Menu" >
+    update system_menu
+    <set >
+      <if test="menuName != null" >
+        menu_name = #{menuName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        parent_id = #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="menuType != null" >
+        menu_type = #{menuType,jdbcType=SMALLINT},
+      </if>
+      <if test="menuUrl != null" >
+        menu_url = #{menuUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="menuSort != null" >
+        menu_sort = #{menuSort,jdbcType=INTEGER},
+      </if>
+      <if test="menuFlag != null" >
+        menu_flag = #{menuFlag,jdbcType=SMALLINT},
+      </if>
+      <if test="menuRemark != null" >
+        menu_remark = #{menuRemark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where menu_id = #{menuId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yungou.o2o.center.manager.model.Menu" >
+    update system_menu
+    set menu_name = #{menuName,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=VARCHAR},
+      menu_type = #{menuType,jdbcType=SMALLINT},
+      menu_url = #{menuUrl,jdbcType=VARCHAR},
+      menu_sort = #{menuSort,jdbcType=INTEGER},
+      menu_flag = #{menuFlag,jdbcType=SMALLINT},
+      menu_remark = #{menuRemark,jdbcType=VARCHAR}
+    where menu_id = #{menuId,jdbcType=VARCHAR}
+  </update>
+  
+  
+  <select id="selectLoginUserMenu" resultMap="BaseResultMap" parameterType="map">
+   SELECT DISTINCT sm.* FROM system_menu sm LEFT JOIN  system_role_menu srm on sm.menu_id=srm.menu_id 
+LEFT JOIN system_user_role sur on srm.role_id =sur.role_id LEFT JOIN  system_user su on sur.user_id = su.userid
+where su.login_name=#{loginName,jdbcType=VARCHAR} and sm.menu_flag=1 ORDER BY sm.menu_sort
+  </select>
+  
+  
+</mapper>

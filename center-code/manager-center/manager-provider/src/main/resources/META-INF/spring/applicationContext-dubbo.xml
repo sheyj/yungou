@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+	http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<dubbo:application name="manager-provider" owner="yungou" />
+	<dubbo:registry address="${registry.address}"  file="${registry.cached.file}"/>
+	<!-- 超时时间默认设置为10秒钟，如果特定的接口的处理时间较长，直接在service中设置超时时间 -->
+	<dubbo:provider timeout="10000" loadbalance="roundrobin" />
+	<dubbo:monitor protocol="registry" />
+
+	
+	<dubbo:service ref="systemMenuService" 
+		interface="com.yungou.o2o.center.manager.service.SystemMenuService" />
+
+</beans>
