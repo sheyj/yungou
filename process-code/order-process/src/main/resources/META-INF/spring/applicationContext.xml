@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+	http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.2.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd  ">
+
+	<context:property-placeholder
+		ignore-unresolvable="true" ignore-resource-not-found="true"
+		system-properties-mode="NEVER"
+		location="file:D:/yungou/config/process/order-process/application.properties" />
+	<!-- Linux 的配置，务必不要修改 -->
+	<context:property-placeholder
+		ignore-unresolvable="true" ignore-resource-not-found="true"
+		system-properties-mode="NEVER"
+		location="file:/etc/yungouconf/process/order-process/application.properties" />
+
+	<context:component-scan base-package="com.yungou.o2o.order.process" /> 
+	<task:annotation-driven />
+
+	<bean id="spyMemcachedClient" class="com.yungou.o2o.redis.common.memcached.SpyMemcachedClient">
+		<property name="memcachedClient">
+			<bean class="net.spy.memcached.spring.MemcachedClientFactoryBean">
+				<property name="servers" value="${memcached.server}" />
+				<!-- 默认是TEXT -->
+				<property name="protocol" value="TEXT" />
+				<!-- 默认是ARRAY_MOD -->
+				<property name="locatorType" value="CONSISTENT" />
+				<!-- 默认是2500毫秒 -->
+				<property name="opTimeout" value="2000" />
+			</bean>
+		</property>
+		<property name="updateTimeout" value="2000" />
+		<property name="shutdownTimeout" value="2000" />
+	</bean>
+	
+	
+	<!-- Redis 相关的配置 start -->
+	<bean name="poolConfig" class="redis.clients.jedis.JedisPoolConfig" >
+		<property name="maxTotal" value="${redis.pool.max.total}" />
+		<property name="maxIdle" value="${redis.pool.max.idle}" />
+		<property name="testOnBorrow" value="${redis.pool.test.on.borrow}" />
+		<property name="testWhileIdle" value="${redis.pool.test.while.idle}" />
+	</bean>
+	
+	<bean name="redisPool" class="redis.clients.jedis.JedisPool"
+		destroy-method="destroy">
+		<constructor-arg name="poolConfig" ref="poolConfig" />
+		<constructor-arg name="host" value="${redis.server.ip}" />
+		<constructor-arg name="port" value="${redis.server.port}" />
+	</bean>
+	
+	<!-- Redis 相关的配置 start -->
+	<bean name="redisTemplate" class="com.yungou.o2o.redis.common.RedisTemplate">
+		<property name="redisPool" ref="redisPool" />
+	</bean>
+
+	<!-- 订单支付成功 -->
+	<bean name="orderPaySuccessProcesser" class="com.yungou.o2o.order.process.OrderPaySuccessProcesser" />
+	
+	<bean class="com.yungou.o2o.redis.common.queue.json.RedisQueueListener"
+		init-method="init" destroy-method="destroy">
+		<property name="redisPool" ref="redisPool" />
+		<property name="queueNames">
+			<list>
+				<value type="java.lang.String">ORDER_PAY_SUCCESS_QUEUE_NAME</value>
+			</list>
+		</property>
+		<property name="processer" ref="orderPaySuccessProcesser" />
+	</bean>
+	
+
+	<!-- 定时任务服务器 Redis配置 start（注意：此配置必须是定时任务服务器所在Redis，各个环境的Redis配置请参考SVN上data-process的配置） -->
+	<bean name="ljobPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<property name="maxTotal" value="${ljob.redis.pool.max.total}" />
+		<property name="maxIdle" value="${ljob.redis.pool.max.idle}" />
+		<property name="testOnBorrow" value="${ljob.redis.pool.test.on.borrow}" />
+		<property name="testWhileIdle" value="${ljob.redis.pool.test.while.idle}" />
+	</bean>
+	<bean name="ljobJedisPool" class="redis.clients.jedis.JedisPool"
+		destroy-method="destroy">
+		<constructor-arg name="poolConfig" ref="ljobPoolConfig" />
+		<constructor-arg name="host" value="${ljob.redis.server.ip}" />
+		<constructor-arg name="port" value="${ljob.redis.server.port}" />
+	</bean>
+	<!-- 定时任务服务器 Redis配置 end -->
+	
+	<!-- 定时任务心跳监测及手动触发start，注：下边的testMode参数，如果配置成true，则不会进行监控直接启动，一般用于本地开发使用 -->
+	<bean id="LjobSchedulerFactory" class="com.yungou.o2o.process.common.scheduling.LjobSchedulerFactory"></bean>
+	<bean id="LjobTrigger" class="com.yungou.o2o.process.common.scheduling.LjobTrigger"
+		init-method="init" destroy-method="destroy">
+		<property name="ljobSchedulerFactory" ref="LjobSchedulerFactory" />
+		<property name="jedisPool" ref="ljobJedisPool" />
+		<property name="testMode" value="false" />
+		<property name="projectName" value="order-process" />
+	</bean>
+	<!-- 定时任务心跳监测及手动触发end -->
+	
+	
+
+</beans>

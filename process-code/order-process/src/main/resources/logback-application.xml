@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+	<logger name="com.yungou.o2o.common" level="INFO" />
+</included>
