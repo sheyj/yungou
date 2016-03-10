@@ -62,11 +62,11 @@ fi
 
 echo -e "Starting the $SERVER_NAME ...\c"
 #gc变量定义
-GC_OPTS="-Xloggc:/data/logs/gc/footmark-center/gc.log -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCApplicationConcurrentTime -XX:+PrintGCApplicationStoppedTime -XX:+PrintHeapAtGC"
+#GC_OPTS="-Xloggc:/data/logs/gc/footmark-center/gc.log -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCApplicationConcurrentTime -XX:+PrintGCApplicationStoppedTime -XX:+PrintHeapAtGC"
 #Tprofiler变量定义
-TPROFILER_OPTS="-javaagent:/usr/local/tprofiler/tprofiler.jar -Dprofile.properties=/usr/local/tprofiler/footmark-center-profiler.properties"
+#TPROFILER_OPTS="-javaagent:/usr/local/tprofiler/tprofiler.jar -Dprofile.properties=/usr/local/tprofiler/footmark-center-profiler.properties"
 
-JAVA_OPTS="$JAVA_OPTS $GC_OPTS $TPROFILER_OPTS"
+JAVA_OPTS="$JAVA_OPTS"
 
 nohup java $JAVA_OPTS $JAVA_MEM_OPTS $JAVA_DEBUG_OPTS $JAVA_JMX_OPTS -classpath $CONF_DIR:$LIB_JARS com.alibaba.dubbo.container.Main > $STDOUT_FILE 2>&1 &
 

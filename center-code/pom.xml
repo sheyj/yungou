@@ -37,7 +37,7 @@
 	<prerequisites>
 		<maven>3.0.0</maven>
 	</prerequisites>
-
+<!--
 	<distributionManagement>
 		<repository>
 			<id>releases</id>
@@ -50,7 +50,7 @@
 			<url>http://172.17.210.101:8081/nexus/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
-
+-->
 	<dependencyManagement>
 		<dependencies>
 			<!-- center-common -->

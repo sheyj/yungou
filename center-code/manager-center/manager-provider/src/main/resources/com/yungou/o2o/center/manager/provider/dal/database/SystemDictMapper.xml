@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yungou.o2o.center.manager.provider.dal.database.SystemDictMapper" >
+  <resultMap id="BaseResultMap" type="com.yungou.o2o.center.manager.model.SystemDict" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="code_type" property="codeType" jdbcType="VARCHAR" />
+    <result column="code_name" property="codeName" jdbcType="VARCHAR" />
+    <result column="code_value" property="codeValue" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+     <result column="sort_value" property="sortValue" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, code_type, code_name, code_value,sort_value, status, remark
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from system_dict
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from system_dict
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yungou.o2o.center.manager.model.SystemDict" >
+    insert into system_dict (id, code_type, code_name, 
+      code_value, sort_value,status, remark
+      )
+    values (#{id,jdbcType=INTEGER}, #{codeType,jdbcType=VARCHAR}, #{codeName,jdbcType=VARCHAR}, 
+      #{codeValue,jdbcType=VARCHAR},#{sortValue,jdbcType=BIGINT}, #{status,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yungou.o2o.center.manager.model.SystemDict" >
+    insert into system_dict
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="codeType != null" >
+        code_type,
+      </if>
+      <if test="codeName != null" >
+        code_name,
+      </if>
+      <if test="codeValue != null" >
+        code_value,
+      </if>
+       <if test="sortValue != null" >
+        sort_value,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="codeType != null" >
+        #{codeType,jdbcType=VARCHAR},
+      </if>
+      <if test="codeName != null" >
+        #{codeName,jdbcType=VARCHAR},
+      </if>
+      <if test="codeValue != null" >
+        #{codeValue,jdbcType=VARCHAR},
+      </if>
+       <if test="sortValue != null" >
+        #{sortValue,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yungou.o2o.center.manager.model.SystemDict" >
+    update system_dict
+    <set >
+      <if test="codeType != null" >
+        code_type = #{codeType,jdbcType=VARCHAR},
+      </if>
+      <if test="codeName != null" >
+        code_name = #{codeName,jdbcType=VARCHAR},
+      </if>
+      <if test="codeValue != null" >
+        code_value = #{codeValue,jdbcType=VARCHAR},
+      </if>
+       <if test="sortValue != null" >
+        sort_value = #{sortValue,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yungou.o2o.center.manager.model.SystemDict" >
+    update system_dict
+    set code_type = #{codeType,jdbcType=VARCHAR},
+      code_name = #{codeName,jdbcType=VARCHAR},
+      code_value = #{codeValue,jdbcType=VARCHAR},
+      sort_value = #{sortValue,jdbcType=BIGINT},
+      status = #{status,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+   <sql id="queryCondition" >
+     <if test="null!=params" >
+      <if test="null!=params.codeType and ''!=params.codeType" >
+      		AND code_type  =#{params.codeType}
+      </if>
+      <if test="null!=params.status and ''!=params.status" >
+      		AND status =#{params.status}
+      </if>
+    </if>
+  </sql>
+  
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List" />
+		from system_dict where 1=1
+		<include refid="queryCondition" />
+		order by code_type,sort_value
+	</select>
+	
+  <select id="selectCount" resultType="java.lang.Integer" >
+    select count(1) from system_dict where 1=1 
+    <include refid="queryCondition" />
+  </select>
+  
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+      select  
+      <include refid="Base_Column_List" />
+       from system_dict 
+         WHERE 1=1
+      <include refid="queryCondition" />       
+      limit #{page.startRowNum},#{page.endRowNum}
+  </select>
+  
+</mapper>
