@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yungou.o2o.center.manager.provider.dal.database.SystemParamMapper" >
+  <resultMap id="BaseResultMap" type="com.yungou.o2o.center.manager.model.SystemParam" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="param_name" property="paramName" jdbcType="VARCHAR" />
+    <result column="param_value" property="paramValue" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+    <result column="param_type" property="paramType" jdbcType="SMALLINT" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, param_name, param_value,param_type, status, remark
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from system_param
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from system_param
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yungou.o2o.center.manager.model.SystemParam" >
+    insert into system_param (id, param_name, param_value, param_type,
+      status, remark)
+    values (#{id,jdbcType=INTEGER}, #{paramName,jdbcType=VARCHAR}, #{paramValue,jdbcType=VARCHAR}, #{paramType,jdbcType=INTEGER},
+      #{status,jdbcType=SMALLINT}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yungou.o2o.center.manager.model.SystemParam" >
+    insert into system_param
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="paramName != null" >
+        param_name,
+      </if>
+      <if test="paramValue != null" >
+        param_value,
+      </if>
+       <if test="paramType != null" >
+        param_type,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="paramName != null" >
+        #{paramName,jdbcType=VARCHAR},
+      </if>
+      <if test="paramValue != null" >
+        #{paramValue,jdbcType=VARCHAR},
+      </if>
+       <if test="paramType != null" >
+        #{paramType,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yungou.o2o.center.manager.model.SystemParam" >
+    update system_param
+    <set >
+      <if test="paramName != null" >
+        param_name = #{paramName,jdbcType=VARCHAR},
+      </if>
+      <if test="paramValue != null" >
+        param_value = #{paramValue,jdbcType=VARCHAR},
+      </if>
+       <if test="paramType != null" >
+        param_type = #{paramType,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yungou.o2o.center.manager.model.SystemParam" >
+    update system_param
+    set param_name = #{paramName,jdbcType=VARCHAR},
+      param_value = #{paramValue,jdbcType=VARCHAR},
+      param_type = #{paramType,jdbcType=INTEGER},
+      status = #{status,jdbcType=SMALLINT},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+   <sql id="queryCondition" >
+     <if test="null!=params" >
+      <if test="null!=params.paramName and ''!=params.paramName" >
+      		AND param_name  =#{params.paramName}
+      </if>
+      <if test="null!=params.status and ''!=params.status" >
+      		AND status =#{params.status}
+      </if>
+       <if test="null!=params.paramType and ''!=params.paramType" >
+      		AND param_type =#{params.paramType}
+      </if>
+    </if>
+  </sql>
+  
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List" />
+		from system_param where 1=1
+		<include refid="queryCondition" />
+	</select>
+	
+  <select id="selectCount" resultType="java.lang.Integer" >
+    select count(1) from system_param where 1=1 
+    <include refid="queryCondition" />
+  </select>
+  
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+      select  
+      <include refid="Base_Column_List" />
+       from system_param 
+         WHERE 1=1
+      <include refid="queryCondition" />       
+      limit #{page.startRowNum},#{page.endRowNum}
+  </select>
+  
+   <delete id="deleteByPrimarayKeyForModel" parameterType="com.yungou.o2o.center.manager.model.SystemParam" >
+    delete from system_param
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+</mapper>

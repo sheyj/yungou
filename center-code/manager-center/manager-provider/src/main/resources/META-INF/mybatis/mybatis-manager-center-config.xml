@@ -16,6 +16,12 @@
 	</plugins>
 	<mappers>
 		<mapper	resource="com/yungou/o2o/center/manager/provider/dal/database/MenuMapper.xml" />
+		<mapper	resource="com/yungou/o2o/center/manager/provider/dal/database/RoleMapper.xml" />
+		<mapper	resource="com/yungou/o2o/center/manager/provider/dal/database/RoleMenuMapper.xml" />
+		<mapper	resource="com/yungou/o2o/center/manager/provider/dal/database/SystemDictMapper.xml" />
+		<mapper	resource="com/yungou/o2o/center/manager/provider/dal/database/SystemParamMapper.xml" />
+		<mapper	resource="com/yungou/o2o/center/manager/provider/dal/database/SystemUserMapper.xml" />
+		<mapper	resource="com/yungou/o2o/center/manager/provider/dal/database/UserRoleMapper.xml" />
 	</mappers>
 	
 	 

@@ -13,5 +13,17 @@
 	
 	<dubbo:service ref="systemMenuService" 
 		interface="com.yungou.o2o.center.manager.service.SystemMenuService" />
+		
+	<dubbo:service ref="roleService" 
+		interface="com.yungou.o2o.center.manager.service.RoleService" />
+		
+	<dubbo:service ref="systemDictService" 
+		interface="com.yungou.o2o.center.manager.service.SystemDictService" />
+		
+	<dubbo:service ref="systemParamService" 
+		interface="com.yungou.o2o.center.manager.service.SystemParamService" />
+		
+	<dubbo:service ref="systemUserService" 
+		interface="com.yungou.o2o.center.manager.service.SystemUserService" />
 
 </beans>
