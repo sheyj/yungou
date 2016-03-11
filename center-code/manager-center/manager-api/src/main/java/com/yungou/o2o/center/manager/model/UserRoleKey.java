@@ -1,6 +1,13 @@
 package com.yungou.o2o.center.manager.model;
 
-public class UserRoleKey {
+import java.io.Serializable;
+
+public class UserRoleKey implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2080561749643071864L;
+
 	private String userId;
 
 	private String roleId;

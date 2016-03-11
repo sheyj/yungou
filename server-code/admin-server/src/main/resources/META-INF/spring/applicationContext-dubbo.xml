@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+	http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<dubbo:application name="admin-server" owner="yungou" />
+	<dubbo:monitor protocol="registry" />
+	<dubbo:registry address="${registry.address}" client="zkclient" file="${registry.cached.file}"/>
+	<dubbo:consumer timeout="10000" />
+
+	<dubbo:reference id="systemMenuService" 
+		interface="com.yungou.o2o.center.manager.service.SystemMenuService" />
+		
+	<dubbo:reference id="roleService" 
+		interface="com.yungou.o2o.center.manager.service.RoleService" />
+		
+	<dubbo:reference id="systemDictService" 
+		interface="com.yungou.o2o.center.manager.service.SystemDictService" />
+		
+	<dubbo:reference id="systemParamService" 
+		interface="com.yungou.o2o.center.manager.service.SystemParamService" />
+		
+	<dubbo:reference id="systemUserService" 
+		interface="com.yungou.o2o.center.manager.service.SystemUserService" />
+
+</beans>

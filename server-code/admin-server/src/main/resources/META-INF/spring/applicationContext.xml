@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+	                      http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+	<context:property-placeholder
+		ignore-unresolvable="true" ignore-resource-not-found="true"
+		system-properties-mode="NEVER"
+		location="file:D:\yungou\config\server\admin-server\application.properties" />
+	 <!-- <context:property-placeholder
+		ignore-unresolvable="true" ignore-resource-not-found="true"
+		system-properties-mode="NEVER"
+		location="file:/etc/yungouconf/server/admin-server/application.properties" />
+
+   分模块服务器访问URL配置 -->
+     <!-- 扫描文件（自动将service层注入） -->
+    
+
+	<context:component-scan base-package="com.yungou.o2o" >
+	<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+	
+	<!-- Redis 相关的配置 start -->
+	<bean name="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+	    <property name="maxTotal" value="100" />
+        <property name="maxIdle" value="10" />
+        <property name="testOnBorrow" value="true" />
+        <property name="testWhileIdle" value="true" />
+	</bean>
+	<bean name="redisPool" class="redis.clients.jedis.JedisPool"
+		destroy-method="destroy">
+		<constructor-arg name="poolConfig" ref="poolConfig" />
+		<constructor-arg name="host" value="${redis.server.ip}" />
+		<constructor-arg name="port" value="${redis.server.port}" />
+	</bean>
+	<bean name="redisTemplate" class="com.yungou.o2o.redis.common.RedisTemplate">
+		<property name="redisPool" ref="redisPool" />
+	</bean>
+	
+	<bean id="spyMemcachedClient" class="com.yungou.o2o.redis.common.memcached.SpyMemcachedClient">
+		<property name="memcachedClient">
+			<bean class="net.spy.memcached.spring.MemcachedClientFactoryBean">
+				<property name="servers" value="${memcached.server}" />
+				<!-- 默认是TEXT -->
+				<property name="protocol" value="TEXT" />
+				<!-- 默认是ARRAY_MOD -->
+				<property name="locatorType" value="CONSISTENT" />
+				<!-- 默认是2500毫秒 -->
+				<property name="opTimeout" value="2000" />
+			</bean>
+		</property>
+		<property name="updateTimeout" value="2000" />
+		<property name="shutdownTimeout" value="2000" />
+	</bean>
+
+	<import resource="applicationContext-dubbo.xml" />
+	
+</beans>

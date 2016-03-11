@@ -1,7 +1,14 @@
 package com.yungou.o2o.center.manager.model;
 
-public class RoleMenuKey {
-    private String roleId;
+import java.io.Serializable;
+
+public class RoleMenuKey implements Serializable{
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 7033240540003930745L;
+
+	private String roleId;
 
     private String menuId;
 
