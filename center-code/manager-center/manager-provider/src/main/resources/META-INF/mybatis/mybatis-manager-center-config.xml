@@ -22,6 +22,7 @@
 		<mapper	resource="com/yungou/o2o/center/manager/provider/dal/database/SystemParamMapper.xml" />
 		<mapper	resource="com/yungou/o2o/center/manager/provider/dal/database/SystemUserMapper.xml" />
 		<mapper	resource="com/yungou/o2o/center/manager/provider/dal/database/UserRoleMapper.xml" />
+		<mapper	resource="com/yungou/o2o/center/manager/provider/dal/database/BrandMapper.xml" />
 	</mappers>
 	
 	 

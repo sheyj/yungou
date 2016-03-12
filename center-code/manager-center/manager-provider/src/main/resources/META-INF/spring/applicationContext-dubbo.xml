@@ -26,4 +26,6 @@
 	<dubbo:service ref="systemUserService" 
 		interface="com.yungou.o2o.center.manager.service.SystemUserService" />
 
+	<dubbo:service ref="brandService" 
+		interface="com.yungou.o2o.center.manager.service.BrandService" />
 </beans>

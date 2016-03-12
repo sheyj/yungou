@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+	<classPathEntry	location="mysql-connector-java-5.1.29.jar"/>
+	<context id="DB2Tables"	targetRuntime="MyBatis3">
+		<commentGenerator>
+			<property name="suppressDate" value="true"/>
+			
+			<property name="suppressAllComments" value="false"/>
+		</commentGenerator>
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://172.17.210.98/yungou" userId="root" password="belle">
+		</jdbcConnection>
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="true"/>
+		</javaTypeResolver>
+		
+		<javaModelGenerator targetPackage="com.yungou.o2o.center.manager.model" targetProject="src">
+			<property name="enableSubPackages" value="true"/>
+			<property name="trimStrings" value="true"/>
+		</javaModelGenerator>
+
+		<sqlMapGenerator targetPackage="mapper"  targetProject="src">
+			<property name="enableSubPackages" value="true"/>
+		</sqlMapGenerator>
+	
+		<javaClientGenerator type="XMLMAPPER" targetPackage="com.yungou.o2o.center.manager.provider.dal.database" targetProject="src">
+			<property name="enableSubPackages" value="true"/>
+		</javaClientGenerator>
+
+<table tableName="brand" domainObjectName="Brand" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
+
+	</context>
+</generatorConfiguration>
