@@ -31,13 +31,14 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.yungou.o2o.center.base.BaseService;
 import com.yungou.o2o.center.base.CommonOperatorEnum;
 import com.yungou.o2o.center.base.ServiceException;
 import com.yungou.o2o.center.base.SimplePage;
 import com.yungou.o2o.common.BeanUtilsCommon;
 import com.yungou.o2o.common.CustomDateEditorBase;
 import com.yungou.o2o.common.HSSFExport;
+import com.yungou.o2o.common.ManagerException;
+import com.yungou.o2o.web.manager.BaseManager;
 
 /**
  * controller基类
@@ -51,14 +52,14 @@ public abstract class BaseController<ModelType> {
 
 	private static final Logger logger = Logger.getLogger(BaseController.class);
 
-	private BaseService service;
+	private BaseManager manager;
 
 	private CrudInfo crudInfo;
 
 	@PostConstruct
 	protected void initConfig() {
 		this.crudInfo = this.init();
-		this.service = crudInfo.getService();
+		this.manager = crudInfo.getManager();
 	}
 
 	protected abstract CrudInfo init();
@@ -115,7 +116,7 @@ public abstract class BaseController<ModelType> {
 
 	@RequestMapping(value = "/list.json")
 	@ResponseBody
-	public Map<String, Object> queryList(HttpServletRequest req, Model model) throws ServiceException {
+	public Map<String, Object> queryList(HttpServletRequest req, Model model) throws ManagerException {
 		int pageNo = StringUtils.isEmpty(req.getParameter("page")) ? 1 : Integer.parseInt(req.getParameter("page"));
 		int pageSize = StringUtils.isEmpty(req.getParameter("rows")) ? 10 : Integer.parseInt(req.getParameter("rows"));
 		String sortColumn = StringUtils.isEmpty(req.getParameter("sort")) ? "" : String.valueOf(req
@@ -123,7 +124,7 @@ public abstract class BaseController<ModelType> {
 		String sortOrder = StringUtils.isEmpty(req.getParameter("order")) ? "" : String.valueOf(req
 				.getParameter("order"));
 		Map<String, Object> params = builderParams(req, model);
-		int total = this.service.findCount(params);
+		int total = this.manager.findCount(params);
 		Map<String, Object> obj = new HashMap<String, Object>();
 		obj.put("total", total);
 		if(total ==0){
@@ -131,7 +132,7 @@ public abstract class BaseController<ModelType> {
 			return obj;
 		}
 		SimplePage page = new SimplePage(pageNo, pageSize, (int) total);
-		List<ModelType> list = this.service.findByPage(page, sortColumn, sortOrder, params);
+		List<ModelType> list = this.manager.findByPage(page, sortColumn, sortOrder, params);
 		obj.put("rows", list);
 		return obj;
 	}
@@ -164,9 +165,9 @@ public abstract class BaseController<ModelType> {
 	}
 
 	@RequestMapping(value = "/get_count.json")
-	public ResponseEntity<Integer> getCount(HttpServletRequest req, Model model) throws ServiceException {
+	public ResponseEntity<Integer> getCount(HttpServletRequest req, Model model) throws ManagerException {
 		Map<String, Object> params = builderParams(req, model);
-		int total = this.service.findCount(params);
+		int total = this.manager.findCount(params);
 		return new ResponseEntity<Integer>(total, HttpStatus.OK);
 	}
 
@@ -176,33 +177,33 @@ public abstract class BaseController<ModelType> {
 	}
 
 	@RequestMapping(value = "/get")
-	public ResponseEntity<ModelType> get(String key) throws ServiceException {
-		ModelType type = service.findById(key);
+	public ResponseEntity<ModelType> get(String key) throws ManagerException {
+		ModelType type = manager.findById(key);
 		return new ResponseEntity<ModelType>(type, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/get_biz")
 	@ResponseBody
-	public List<ModelType> getBiz(ModelType modelType, HttpServletRequest req, Model model) throws ServiceException {
+	public List<ModelType> getBiz(ModelType modelType, HttpServletRequest req, Model model) throws ManagerException {
 		Map<String, Object> params = builderParams(req, model);
-		return this.service.findByBiz(modelType, params);
+		return this.manager.findByBiz(modelType, params);
 	}
 
 	@RequestMapping(value = "/post")
-	public ResponseEntity<ModelType> add(ModelType type) throws ServiceException {
-		service.add(type);
+	public ResponseEntity<ModelType> add(ModelType type) throws ManagerException {
+		manager.add(type);
 		return new ResponseEntity<ModelType>(type, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/put")
-	public ResponseEntity<ModelType> moditfy(ModelType type) throws ServiceException {
-		service.modifyById(type);
+	public ResponseEntity<ModelType> moditfy(ModelType type) throws ManagerException {
+		manager.modifyById(type);
 		return new ResponseEntity<ModelType>(type, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/delete")
-	public ResponseEntity<Map<String, Boolean>> remove(ModelType type) throws ServiceException {
-		service.deleteById(type);
+	public ResponseEntity<Map<String, Boolean>> remove(ModelType type) throws ManagerException {
+		manager.deleteById(type);
 		Map<String, Boolean> flag = new HashMap<String, Boolean>();
 		flag.put("success", true);
 		return new ResponseEntity<Map<String, Boolean>>(flag, HttpStatus.OK);
@@ -211,7 +212,7 @@ public abstract class BaseController<ModelType> {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/save")
 	public ResponseEntity<Map<String, Boolean>> save(HttpServletRequest req) throws JsonParseException,
-			JsonMappingException, IOException, ServiceException {
+			JsonMappingException, IOException, ManagerException {
 		Map<String, Boolean> flag = new HashMap<String, Boolean>();
 
 		String deletedList = StringUtils.isEmpty(req.getParameter("deleted")) ? "" : req.getParameter("deleted");
@@ -238,7 +239,7 @@ public abstract class BaseController<ModelType> {
 			params.put(CommonOperatorEnum.INSERTED, oList);
 		}
 		if (params.size() > 0) {
-			service.save(params);
+			manager.save(params);
 		}
 		flag.put("success", true);
 		return new ResponseEntity<Map<String, Boolean>>(flag, HttpStatus.OK);
@@ -286,9 +287,9 @@ public abstract class BaseController<ModelType> {
 				});
 
 				//List<ModelType> list= this .service .findByBiz(modelType, params);
-				int total = this.service.findCount(params);
+				int total = this.manager.findCount(params);
 				SimplePage page = new SimplePage(1, total, (int) total);
-				List<ModelType> list = this.service.findByPage(page, "", "", params);
+				List<ModelType> list = this.manager.findByPage(page, "", "", params);
 				List<Map> listArrayList = new ArrayList<Map>();
 				if (list != null && list.size() > 0) {
 					for (ModelType vo : list) {
@@ -312,15 +313,15 @@ public abstract class BaseController<ModelType> {
 
 	public class CrudInfo {
 
-		public CrudInfo(String ftlFolder, BaseService service) {
+		public CrudInfo(String ftlFolder, BaseManager manager) {
 			super();
 			this.ftlFolder = ftlFolder;
-			this.service = service;
+			this.manager = manager;
 		}
 
 		private String ftlFolder;
 
-		private BaseService service;
+		private BaseManager manager;
 
 		public String getFtlFolder() {
 			return ftlFolder;
@@ -330,13 +331,15 @@ public abstract class BaseController<ModelType> {
 			this.ftlFolder = ftlFolder;
 		}
 
-		public BaseService getService() {
-			return service;
+		public BaseManager getManager() {
+			return manager;
 		}
 
-		public void setService(BaseService service) {
-			this.service = service;
+		public void setManager(BaseManager manager) {
+			this.manager = manager;
 		}
+
+		
 
 	}
 }

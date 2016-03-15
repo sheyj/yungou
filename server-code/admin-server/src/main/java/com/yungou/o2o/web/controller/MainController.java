@@ -11,14 +11,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.yungou.o2o.center.base.ServiceException;
 import com.yungou.o2o.center.manager.common.dto.MenuVo;
 import com.yungou.o2o.center.manager.model.SystemUser;
+import com.yungou.o2o.common.ManagerException;
 import com.yungou.o2o.common.PublicConstans;
 import com.yungou.o2o.util.CommonUtil;
 import com.yungou.o2o.web.manager.SystemUserManager;
@@ -29,7 +30,7 @@ public class MainController {
 
 	private static Logger logger = Logger.getLogger(MainController.class);
 	
-	@Resource
+	@Autowired
 	private SystemUserManager systemUserManager;
 
 	@RequestMapping("index")
@@ -39,7 +40,7 @@ public class MainController {
 
 	@RequestMapping(value = "/login")
 	public String login(String loginName, String loginPassword, String flag, String cookieFlag, HttpServletRequest req,
-			HttpServletResponse response, Model model) throws ServiceException {
+			HttpServletResponse response, Model model) throws ManagerException {
 		//1.判断用户名不能为空
 		if (!CommonUtil.hasValue(loginName) || !CommonUtil.hasValue(loginPassword)) {
 			logoutMethod(req, response);
@@ -82,7 +83,7 @@ public class MainController {
 		try {
 			SystemUser loginUser =(SystemUser) req.getSession().getAttribute(PublicConstans.SESSION_USER);
 			list = systemUserManager.getLoginUserMenu(loginUser.getLoginName());
-		} catch (ServiceException e) {
+		} catch (ManagerException e) {
 			logger.error("获取用户菜单出错！",e);
 		}
 		return list;

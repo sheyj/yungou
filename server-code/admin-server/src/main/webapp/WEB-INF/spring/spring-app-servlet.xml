@@ -29,7 +29,7 @@
 			<property name="alwaysUseFullPath" value="true" />
 		</bean>
 		<mvc:interceptor>  
-		<mvc:mapping path="/admin/**"/>  
+		<mvc:mapping path="/**"/>  
 		<bean class="com.yungou.o2o.interceptor.SessionCheckInterceptor"></bean>  
 		</mvc:interceptor>  
 	</mvc:interceptors>
