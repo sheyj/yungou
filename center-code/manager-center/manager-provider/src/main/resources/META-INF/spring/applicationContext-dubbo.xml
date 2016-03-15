@@ -26,6 +26,16 @@
 	<dubbo:service ref="systemUserService" 
 		interface="com.yungou.o2o.center.manager.service.SystemUserService" />
 
-	<dubbo:service ref="brandService" 
-		interface="com.yungou.o2o.center.manager.service.BrandService" />
+	<dubbo:service ref="brandService" interface="com.yungou.o2o.center.manager.service.BrandService" />
+	<dubbo:service ref="activityService" interface="com.yungou.o2o.center.manager.service.ActivityService" />
+	<dubbo:service ref="categoryService" interface="com.yungou.o2o.center.manager.service.CategoryService" />
+	<dubbo:service ref="goodsService" interface="com.yungou.o2o.center.manager.service.GoodsService" />
+	<dubbo:service ref="homePagePicService" interface="com.yungou.o2o.center.manager.service.HomePagePicService" />
+	<dubbo:service ref="memberAddressService" interface="com.yungou.o2o.center.manager.service.MemberAddressService" />
+	<dubbo:service ref="memberBankService" interface="com.yungou.o2o.center.manager.service.MemberBankService" />
+	<dubbo:service ref="memberBankDetailService" interface="com.yungou.o2o.center.manager.service.MemberBankDetailService" />
+	<dubbo:service ref="memberBaseService" interface="com.yungou.o2o.center.manager.service.MemberBaseService" />
+	<dubbo:service ref="memberShareService" interface="com.yungou.o2o.center.manager.service.MemberShareService" />
+	<dubbo:service ref="orderInfoService" interface="com.yungou.o2o.center.manager.service.OrderInfoService" />
+
 </beans>
