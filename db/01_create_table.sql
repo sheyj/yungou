@@ -182,14 +182,400 @@ INSERT INTO `system_user_role` VALUES ('888888', '1');
 
 
 DROP TABLE IF EXISTS `brand`;
-CREATE TABLE `brand` (
-  `id` varchar(32) NOT NULL COMMENT 'PK',
-  `brand_name` varchar(160) NOT NULL COMMENT '品牌名称',
-  `brand_code` varchar(50) NOT NULL COMMENT '品牌编码',
-  `status` smallint DEFAULT 1 COMMENT '1=正常2=锁定',
-  `creator` varchar(50) DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime DEFAULT NULL COMMENT '修改时间',
-  `remark` varchar(200) DEFAULT NULL COMMENT '备注',
-  PRIMARY KEY (`id`)
+
+create table  brand
+(
+       Id                VARCHAR(40) not null,
+       brand_name        VARCHAR(50) not null,
+       brand_code        VARCHAR(20) not null,
+       brand_desc        VARCHAR(200),
+       creator           VARCHAR(20),
+       create_time       DATETIME
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='品牌表';
+alter  table brand
+       add constraint PK_brand_Id primary key (Id);
+
+
+create table  category
+(
+       Id                VARCHAR(40) not null,
+       category_name     VARCHAR(50) not null,
+       category_code     VARCHAR(20) not null,
+       parent_id         VARCHAR(40)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品分类表';
+alter  table category
+       add constraint PK_category_Id primary key (Id);
+
+
+/*
+警告: 字段名可能非法 - status
+*/
+create table  goods
+(
+       Id                VARCHAR(40) not null,
+       goods_name        VARCHAR(100) not null,
+       goods_code        VARCHAR(40) not null,
+       category_id       VARCHAR(40) not null,
+       brand_id          VARCHAR(40) not null,
+       `STATUS`            INTEGER not null,
+       goods_desc        VARCHAR(2000),
+       creator           VARCHAR(40),
+       create_time       DATETIME,
+       update_time       DATETIME,
+       goods_price       INTEGER,
+       limit_times       INTEGER,
+       queue_num         INTEGER,
+       is_recommend      INTEGER,
+       cost_price        NUMERIC,
+       queue_no          INTEGER,
+       goods_title       VARCHAR(100)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品表';
+alter  table goods
+       add constraint PK_goods_Id primary key (Id);
+
+
+create table  goods_pic
+(
+       Id                VARCHAR(40) not null,
+       goods_id          VARCHAR(40),
+       pic_type          INTEGER,
+       pic_url           VARCHAR(200)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品图片表';
+alter  table goods_pic
+       add constraint PK_goods_pic_Id primary key (Id);
+
+
+/*
+警告: 字段名可能非法 - status
+*/
+create table  member_base
+(
+       Id                VARCHAR(40) not null,
+       mobile_phone      VARCHAR(20),
+       member_account    VARCHAR(50),
+       member_password   VARCHAR(40),
+       member_name       VARCHAR(40),
+       member_image      VARCHAR(300),
+       member_email      VARCHAR(4000),
+       qq_no             VARCHAR(20),
+       open_id           VARCHAR(40),
+       birthday          DATETIME,
+       create_time       DATETIME,
+       update_time       DATETIME,
+       register_ip       VARCHAR(4000),
+       registre_source   VARCHAR(4000),
+       STATUS            VARCHAR(4000),
+       mobile_validate   INTEGER,
+       email_validate    INTEGER,
+       remark            VARCHAR(200),
+       member_level      VARCHAR(10),
+       invite_member_id  VARCHAR(40)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员基本信息表';
+alter  table member_base
+       add constraint PK_member_base_Id primary key (Id);
+
+
+create table  member_bank
+(
+       Id                VARCHAR(40) not null,
+       member_id         VARCHAR(40),
+       integral          INTEGER,
+       account_balance   INTEGER,
+       create_time       DATETIME,
+       update_time       VARCHAR(4000)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员资产表';
+alter  table member_bank
+       add constraint PK_member_bank_Id primary key (Id);
+
+
+create table  member_bank_detail
+(
+       Id                VARCHAR(40) not null,
+       member_id         VARCHAR(40),
+       member_bank_id    VARCHAR(40),
+       change_type       INTEGER,
+       change_value      INTEGER,
+       change_desc       VARCHAR(50),
+       create_time       DATETIME
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员资产明细表';
+alter  table member_bank_detail
+       add constraint PK_member_bank_detail_Id primary key (Id);
+
+
+create table  member_address
+(
+       Id                VARCHAR(40) not null,
+       member_id         VARCHAR(40),
+       province_code     VARCHAR(20),
+       city_code         VARCHAR(20),
+       area_code         VARCHAR(20),
+       province_name     VARCHAR(40),
+       city_name         VARCHAR(40),
+       area_name         VARCHAR(40),
+       detail_address    VARCHAR(200),
+       postalcode        VARCHAR(10),
+       is_default        INTEGER,
+       contacts          VARCHAR(20),
+       contact_phone     VARCHAR(20),
+       create_time       DATETIME
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员收货地址表';
+alter  table member_address
+       add constraint PK_member_address_Id primary key (Id);
+
+
+create table  home_page_pic
+(
+       Id                VARCHAR(40) not null,
+       pic_name          VARCHAR(50),
+       pic_url           VARCHAR(300),
+       pic_link          VARCHAR(300),
+       sort_value        INTEGER,
+       create_time       DATETIME
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='主页轮播图表';
+alter  table home_page_pic
+       add constraint PK_home_page_pic_Id primary key (Id);
+
+
+create table  member_share
+(
+       Id                VARCHAR(40) not null,
+       member_id         VARCHAR(40),
+       member_account    VARCHAR(50),
+       order_id          VARCHAR(40),
+       share_title       VARCHAR(100),
+       share_desc        VARCHAR(200),
+       create_time       DATETIME,
+       click_num         INTEGER
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员分享表';
+alter  table member_share
+       add constraint PK_member_share_Id primary key (Id);
+
+
+create table  member_share_pic
+(
+       Id                VARCHAR(40) not null,
+       member_share_id   VARCHAR(40),
+       pic_url           VARCHAR(300),
+       sort_value        INTEGER,
+       create_time       DATETIME
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员分享图片表';
+alter  table member_share_pic
+       add constraint PK_member_share_pic_Id primary key (Id);
+
+
+/*
+警告: 字段名可能非法 - status
+*/
+create table  member_circle
+(
+       Id                VARCHAR(40) not null,
+       circle_name       VARCHAR(50),
+       circle_desc       VARCHAR(300),
+       create_time       DATETIME,
+       `STATUS`            INTEGER
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员圈子表';
+alter  table member_circle
+       add constraint PK_member_circle_Id primary key (Id);
+
+
+create table  circle_topic
+(
+       Id                VARCHAR(40) not null,
+       circle_id         VARCHAR(4000),
+       member_id         VARCHAR(40),
+       member_account    VARCHAR(50),
+       topic_name        VARCHAR(100),
+       topic_desc        VARCHAR(300),
+       create_time       DATETIME,
+       creator           VARCHAR(20),
+       good_num          INTEGER
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='圈子主题表';
+alter  table circle_topic
+       add constraint PK_circle_topic_Id primary key (Id);
+
+
+create table  topic_reply
+(
+       Id                VARCHAR(40) not null,
+       topic_id          VARCHAR(40),
+       reply_desc        VARCHAR(300),
+       member_id         VARCHAR(40),
+       member_account    VARCHAR(50),
+       create_time       DATETIME
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='主题回复表';
+alter  table topic_reply
+       add constraint PK_topic_reply_Id primary key (Id);
+
+
+create table  member_level
+(
+       Id                VARCHAR(40) not null,
+       level_name        VARCHAR(50),
+       level_pic         VARCHAR(300),
+       create_time       DATETIME
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员级别表';
+alter  table member_level
+       add constraint PK_member_level_Id primary key (Id);
+
+
+create table  activity
+(
+       Id                VARCHAR(40) not null,
+       goods_id          VARCHAR(40),
+       goods_name        VARCHAR(200),
+       goods_title       VARCHAR(200),
+       queue_no          INTEGER,
+       create_time       DATETIME,
+       end_time          DATETIME,
+       goods_price       VARCHAR(4000),
+       buy_num           INTEGER,
+       total_buy_num     INTEGER,
+       prize_no          VARCHAR(20),
+       winner_member_id  VARCHAR(40),
+       winner_member_account VARCHAR(50),
+       winner_draw_num   INTEGER,
+       last_order_time   DATETIME
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='活动表';
+alter  table activity
+       add constraint PK_activity_Id primary key (Id);
+
+
+/*
+警告: 表名可能非法 - order
+警告: 字段名可能非法 - status
+*/
+create table  order_info
+(
+       Id                VARCHAR(40) not null,
+       activity_id       VARCHAR(40),
+       create_time       DATETIME,
+       member_id         VARCHAR(40),
+       member_account    VARCHAR(50),
+       draw_num          INTEGER,
+       draw_ip           VARCHAR(50),
+       draw_source       INTEGER,
+       pay_type          INTEGER,
+       pay_name          VARCHAR(50),
+       pay_desc          VARCHAR(100),
+       pay_id            VARCHAR(50),
+       pay_time          DATETIME,
+       `STATUS`            VARCHAR(4000),
+       delivery_status   INTEGER,
+       draw_value        INTEGER
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单表';
+alter  table order_info
+       add constraint PK_order_Id primary key (Id);
+
+
+create table  order_ticket
+(
+       Id                INTEGER not null,
+       order_id          VARCHAR(40),
+       ticket_no         VARCHAR(20)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单券表';
+alter  table order_ticket
+       add constraint PK_order_ticket_Id primary key (Id);
+
+
+create table  activity_result
+(
+       Id                VARCHAR(40) not null,
+       activity_id       VARCHAR(40),
+       order_id          VARCHAR(40)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='活动结果表';
+alter  table activity_result
+       add constraint PK_activity_result_Id primary key (Id);
+
+
+create table  commission_detail
+(
+       Id                VARCHAR(40) not null,
+       member_id         VARCHAR(40),
+       invite_member_id  VARCHAR(40),
+       order_id          VARCHAR(40),
+       create_time       DATETIME,
+       commission_value  NUMERIC,
+       commission_id     VARCHAR(40)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='佣金明细表';
+alter  table commission_detail
+       add constraint PK_commission_detail_Id primary key (Id);
+
+
+create table  commission
+(
+       Id                VARCHAR(40) not null,
+       member_id         VARCHAR(40),
+       total_commission  NUMERIC,
+       fetch_commission  NUMERIC,
+       create_time       DATETIME
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='佣金表';
+alter  table commission
+       add constraint PK_commission_Id primary key (Id);
+
+
+/*
+警告: 字段名可能非法 - status
+*/
+create table  complaint
+(
+       Id                VARCHAR(40) not null,
+       member_id         VARCHAR(40),
+       complaint_type    INTEGER,
+       user_name         VARCHAR(20),
+       mobile_no         VARCHAR(20),
+       user_email        VARCHAR(20),
+       complaint_desc    VARCHAR(300),
+       `STATUS`            VARCHAR(4000),
+       deal_result       VARCHAR(300),
+       deal_time         DATETIME,
+       create_time       DATETIME,
+       deal_name         VARCHAR(50)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='投诉建议表';
+alter  table complaint
+       add constraint PK_complaint_Id primary key (Id);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
