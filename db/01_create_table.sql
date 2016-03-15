@@ -212,23 +212,23 @@ alter  table category
 */
 create table  goods
 (
-       Id                VARCHAR(40) not null,
-       goods_name        VARCHAR(100) not null,
-       goods_code        VARCHAR(40) not null,
-       category_id       VARCHAR(40) not null,
-       brand_id          VARCHAR(40) not null,
-       `STATUS`            INTEGER not null,
-       goods_desc        VARCHAR(2000),
-       creator           VARCHAR(40),
-       create_time       DATETIME,
-       update_time       DATETIME,
-       goods_price       INTEGER,
-       limit_times       INTEGER,
-       queue_num         INTEGER,
-       is_recommend      INTEGER,
-       cost_price        NUMERIC,
-       queue_no          INTEGER,
-       goods_title       VARCHAR(100)
+      `Id`              VARCHAR(40) not null comment '编号 ID',
+       `goods_name`      VARCHAR(100) not null comment '商品名称 商品名称',
+       `goods_code`      VARCHAR(40) not null comment '商品编码 商品编码',
+       `category_id`     VARCHAR(40) not null comment '分类ID 分类ID',
+       `brand_id`        VARCHAR(40) not null comment '品牌ID 品牌ID',
+       `status`          INT not null comment '状态 状态1上架2下架',
+       `goods_desc`      VARCHAR(2000) comment '商品描述 商品描述',
+       `creator`         VARCHAR(40) comment '创建人 创建人',
+       `create_time`     DATETIME comment '创建时间 创建时间',
+       `update_time`     DATETIME comment '修改时间 修改时间',
+       `goods_price`     INT comment '商品价格 商品价格',
+       `limit_times`     INT comment '限制次数 限制次数',
+       `queue_num`       INT comment '总期数 总期数',
+       `is_recommend`    INT comment '是否推荐 是否推荐  1是 2否',
+       `cost_price`      DOUBLE comment '成本价 成本价',
+       `queue_no`        INT comment '当前期号 当前期号',
+       `goods_title`     VARCHAR(100) comment '商品标题 商品标题'
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品表';
 alter  table goods
        add constraint PK_goods_Id primary key (Id);
@@ -250,26 +250,26 @@ alter  table goods_pic
 */
 create table  member_base
 (
-       Id                VARCHAR(40) not null,
-       mobile_phone      VARCHAR(20),
-       member_account    VARCHAR(50),
-       member_password   VARCHAR(40),
-       member_name       VARCHAR(40),
-       member_image      VARCHAR(300),
-       member_email      VARCHAR(4000),
-       qq_no             VARCHAR(20),
-       open_id           VARCHAR(40),
-       birthday          DATETIME,
-       create_time       DATETIME,
-       update_time       DATETIME,
-       register_ip       VARCHAR(4000),
-       registre_source   VARCHAR(4000),
-       STATUS            VARCHAR(4000),
-       mobile_validate   INTEGER,
-       email_validate    INTEGER,
-       remark            VARCHAR(200),
-       member_level      VARCHAR(10),
-       invite_member_id  VARCHAR(40)
+      `Id`              VARCHAR(40) not null comment 'ID ID',
+       `mobile_phone`    VARCHAR(20) comment '移动电话',
+       `member_account`  VARCHAR(50) comment '会员账号 ',
+       `member_password` VARCHAR(40) comment '会员密码',
+       `member_name`     VARCHAR(40) comment '会员名称 ',
+       `member_image`    VARCHAR(300) comment '会员头像图片',
+       `member_email`    VARCHAR(4000) comment '会员邮箱 ',
+       `qq_no`           VARCHAR(20) comment 'QQ号码',
+       `open_id`         VARCHAR(40) comment '微信ID',
+       `birthday`        DATETIME comment '生日',
+       `create_time`     DATETIME comment '创建时间',
+       `update_time`     DATETIME comment '修改时间',
+       `register_ip`     VARCHAR(4000) comment '注册IP',
+       `registre_source` VARCHAR(4000) comment '注册来源',
+       `status`          VARCHAR(4000) comment '状态1 正常 2锁定',
+       `mobile_validate` INT comment '手机验证 1是 2否',
+       `email_validate`  INT comment '邮箱验证1验证2否',
+       `remark`          VARCHAR(200) comment '备注',
+       `member_level`    VARCHAR(10) comment '会员级别',
+       `invite_member_id` VARCHAR(40) comment '邀请人ID'
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员基本信息表';
 alter  table member_base
        add constraint PK_member_base_Id primary key (Id);
@@ -277,12 +277,12 @@ alter  table member_base
 
 create table  member_bank
 (
-       Id                VARCHAR(40) not null,
-       member_id         VARCHAR(40),
-       integral          INTEGER,
-       account_balance   INTEGER,
-       create_time       DATETIME,
-       update_time       VARCHAR(4000)
+       `Id`              VARCHAR(40) not null comment '编号',
+       `member_id`       VARCHAR(40) comment ' 会员账号ID',
+       `integral`        INT comment ' 积分',
+       `account_balance` INT comment ' 账号余额',
+       `create_time`     DATETIME comment ' 创建时间',
+       `update_time`     DATETIME comment ' 修改时间'
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员资产表';
 alter  table member_bank
        add constraint PK_member_bank_Id primary key (Id);
@@ -290,13 +290,13 @@ alter  table member_bank
 
 create table  member_bank_detail
 (
-       Id                VARCHAR(40) not null,
-       member_id         VARCHAR(40),
-       member_bank_id    VARCHAR(40),
-       change_type       INTEGER,
-       change_value      INTEGER,
-       change_desc       VARCHAR(50),
-       create_time       DATETIME
+      `Id`              VARCHAR(40) not null comment '编号 ID',
+       `member_id`       VARCHAR(40) comment '会员ID 会员ID',
+       `member_bank_id`  VARCHAR(40) comment '会员财务ID',
+       `change_type`     INT comment '变更类型 1 积分  2 账号余额',
+       `change_value`    INT comment ' 变化值',
+       `change_desc`     VARCHAR(50) comment ' 变更描述',
+       `create_time`     DATETIME comment '创建时间'
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员资产明细表';
 alter  table member_bank_detail
        add constraint PK_member_bank_detail_Id primary key (Id);
@@ -304,20 +304,20 @@ alter  table member_bank_detail
 
 create table  member_address
 (
-       Id                VARCHAR(40) not null,
-       member_id         VARCHAR(40),
-       province_code     VARCHAR(20),
-       city_code         VARCHAR(20),
-       area_code         VARCHAR(20),
-       province_name     VARCHAR(40),
-       city_name         VARCHAR(40),
-       area_name         VARCHAR(40),
-       detail_address    VARCHAR(200),
-       postalcode        VARCHAR(10),
-       is_default        INTEGER,
-       contacts          VARCHAR(20),
-       contact_phone     VARCHAR(20),
-       create_time       DATETIME
+       `Id`              VARCHAR(40) not null comment '编号',
+       `member_id`       VARCHAR(40) comment '会员ID 会员ID',
+       `province_code`   VARCHAR(20) comment '省份代码',
+       `city_code`       VARCHAR(20) comment '城市代码 城市代码',
+       `area_code`       VARCHAR(20) comment '地区 地区',
+       `province_name`   VARCHAR(40) comment '省份名称 省份名称',
+       `city_name`       VARCHAR(40) comment '城市名称 城市名称',
+       `area_name`       VARCHAR(40) comment '地区名称 地区名称',
+       `detail_address`  VARCHAR(200) comment '详细地址 详细地址',
+       `postalcode`      VARCHAR(10) comment '邮政编码 邮政编码',
+       `is_default`      INT comment '是否默认收货地址 是否默认收货地址  1 是 2 否',
+       `contacts`        VARCHAR(20) comment '联系人 联系人',
+       `contact_phone`   VARCHAR(20) comment '联系电话 联系电话',
+       `create_time`     DATETIME comment '创建时间 创建时间'
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员收货地址表';
 alter  table member_address
        add constraint PK_member_address_Id primary key (Id);
@@ -338,14 +338,14 @@ alter  table home_page_pic
 
 create table  member_share
 (
-       Id                VARCHAR(40) not null,
-       member_id         VARCHAR(40),
-       member_account    VARCHAR(50),
-       order_id          VARCHAR(40),
-       share_title       VARCHAR(100),
-       share_desc        VARCHAR(200),
-       create_time       DATETIME,
-       click_num         INTEGER
+      `Id`              VARCHAR(40) not null comment '编号',
+       `member_id`       VARCHAR(40) comment '会员ID',
+       `member_account`  VARCHAR(50) comment '会员账号 会员账号',
+       `order_id`        VARCHAR(40) comment '订单ID 订单ID',
+       `share_title`     VARCHAR(100) comment '分享标题 分享标题',
+       `share_desc`      VARCHAR(200) comment '分享描述 分享描述',
+       `create_time`     DATETIME comment '创建时间 创建时间',
+       `click_num`       INT comment '点击数量 点击数量'
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员分享表';
 alter  table member_share
        add constraint PK_member_share_Id primary key (Id);
@@ -380,15 +380,15 @@ alter  table member_circle
 
 create table  circle_topic
 (
-       Id                VARCHAR(40) not null,
-       circle_id         VARCHAR(4000),
-       member_id         VARCHAR(40),
-       member_account    VARCHAR(50),
-       topic_name        VARCHAR(100),
-       topic_desc        VARCHAR(300),
-       create_time       DATETIME,
-       creator           VARCHAR(20),
-       good_num          INTEGER
+       `Id`              VARCHAR(40) not null comment '编号',
+       `circle_id`       VARCHAR(4000) comment '圈子ID',
+       `member_id`       VARCHAR(40) comment '会员ID',
+       `member_account`  VARCHAR(50) comment '会员账号',
+       `topic_name`      VARCHAR(100) comment ' 话题名称',
+       `topic_desc`      VARCHAR(300) comment '话题描述',
+       `create_time`     DATETIME comment '创建时间',
+       `creator`         VARCHAR(20) comment ' 创建人',
+       `good_num`        INT comment '赞数量'
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='圈子主题表';
 alter  table circle_topic
        add constraint PK_circle_topic_Id primary key (Id);
@@ -420,21 +420,21 @@ alter  table member_level
 
 create table  activity
 (
-       Id                VARCHAR(40) not null,
-       goods_id          VARCHAR(40),
-       goods_name        VARCHAR(200),
-       goods_title       VARCHAR(200),
-       queue_no          INTEGER,
-       create_time       DATETIME,
-       end_time          DATETIME,
-       goods_price       VARCHAR(4000),
-       buy_num           INTEGER,
-       total_buy_num     INTEGER,
-       prize_no          VARCHAR(20),
-       winner_member_id  VARCHAR(40),
-       winner_member_account VARCHAR(50),
-       winner_draw_num   INTEGER,
-       last_order_time   DATETIME
+       `Id`              VARCHAR(40) not null comment '编号',
+       `goods_id`        VARCHAR(40) comment '商品ID',
+       `goods_name`      VARCHAR(200) comment '商品名称',
+       `goods_title`     VARCHAR(200) comment '商品标题',
+       `queue_no`        INT comment '期号 ',
+       `create_time`     DATETIME comment ' 创建时间',
+       `end_time`        DATETIME comment '结结束时间',
+       `goods_price`     INT comment '商品价值',
+       `buy_num`         INT comment ' 购买人次',
+       `total_buy_num`   INT comment '总需购买人次',
+       `prize_no`        VARCHAR(20) comment ' 中奖编号',
+       `winner_member_id` VARCHAR(40) comment '中奖会员ID',
+       `winner_member_account` VARCHAR(50) comment ' 中奖会员账号',
+       `winner_draw_num` INT comment '中奖人参与次数',
+       `last_order_time` DATETIME comment '最后购买订单时间'
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='活动表';
 alter  table activity
        add constraint PK_activity_Id primary key (Id);
@@ -446,22 +446,22 @@ alter  table activity
 */
 create table  order_info
 (
-       Id                VARCHAR(40) not null,
-       activity_id       VARCHAR(40),
-       create_time       DATETIME,
-       member_id         VARCHAR(40),
-       member_account    VARCHAR(50),
-       draw_num          INTEGER,
-       draw_ip           VARCHAR(50),
-       draw_source       INTEGER,
-       pay_type          INTEGER,
-       pay_name          VARCHAR(50),
-       pay_desc          VARCHAR(100),
-       pay_id            VARCHAR(50),
-       pay_time          DATETIME,
-       `STATUS`            VARCHAR(4000),
-       delivery_status   INTEGER,
-       draw_value        INTEGER
+      `Id`              VARCHAR(40) not null comment '编号',
+       `activity_id`     VARCHAR(40) comment ' 活动ID',
+       `create_time`     DATETIME comment '创建时间',
+       `member_id`       VARCHAR(40) DEFAULT NULL comment ' 会员ID',
+       `member_account`  VARCHAR(50) DEFAULT NULL comment ' 会员账号',
+       `draw_num`        INT comment '参与人次 ',
+       `draw_ip`         VARCHAR(50) DEFAULT NULL comment ' 抽奖IP',
+       `draw_source`     INT comment '抽奖来源  1PC 2手机 3 平板',
+       `pay_type`        INT comment '支付方式  1积分 2账号余额 3 在线支付',
+       `pay_name`        VARCHAR(50)DEFAULT NULL comment ' 支付名称',
+       `pay_desc`        VARCHAR(100) DEFAULT NULL comment ' 支付描述',
+       `pay_id`          VARCHAR(50) DEFAULT NULL comment ' 支付描述',
+       `pay_time`        DATETIME comment '支付时间',
+       `status`          INT DEFAULT NULL comment '订单状态 1已中奖 2未中奖',
+       `delivery_status` INT DEFAULT NULL comment '发货状态 1 未发货 2已发货',
+       `draw_value`      INT DEFAULT NULL comment ' 抽奖时间值'
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单表';
 alter  table order_info
        add constraint PK_order_Id primary key (Id);
@@ -470,8 +470,8 @@ alter  table order_info
 create table  order_ticket
 (
        Id                INTEGER not null,
-       order_id          VARCHAR(40),
-       ticket_no         VARCHAR(20)
+       order_id          VARCHAR(40) DEFAULT NULL,
+       ticket_no         VARCHAR(20) DEFAULT NULL
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单券表';
 alter  table order_ticket
        add constraint PK_order_ticket_Id primary key (Id);
@@ -480,8 +480,8 @@ alter  table order_ticket
 create table  activity_result
 (
        Id                VARCHAR(40) not null,
-       activity_id       VARCHAR(40),
-       order_id          VARCHAR(40)
+       activity_id       VARCHAR(40) DEFAULT NULL,
+       order_id          VARCHAR(40) DEFAULT NULL
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='活动结果表';
 alter  table activity_result
        add constraint PK_activity_result_Id primary key (Id);
@@ -489,13 +489,13 @@ alter  table activity_result
 
 create table  commission_detail
 (
-       Id                VARCHAR(40) not null,
-       member_id         VARCHAR(40),
-       invite_member_id  VARCHAR(40),
-       order_id          VARCHAR(40),
-       create_time       DATETIME,
-       commission_value  NUMERIC,
-       commission_id     VARCHAR(40)
+       `Id`              VARCHAR(40) not null comment '编号',
+       `member_id`       VARCHAR(40) DEFAULT NULL comment '会员ID 会员ID',
+       `invite_member_id` VARCHAR(40) DEFAULT NULL comment '邀请人ID 邀请人ID',
+       `order_id`        VARCHAR(40) DEFAULT NULL comment '订单ID 订单ID',
+       `create_time`     DATETIME comment '创建时间 创建时间',
+       `commission_value` DOUBLE DEFAULT 0 comment '佣金值 佣金值',
+       `commission_id`   VARCHAR(40) comment '佣金ID 佣金ID'
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='佣金明细表';
 alter  table commission_detail
        add constraint PK_commission_detail_Id primary key (Id);
@@ -503,11 +503,11 @@ alter  table commission_detail
 
 create table  commission
 (
-       Id                VARCHAR(40) not null,
-       member_id         VARCHAR(40),
-       total_commission  NUMERIC,
-       fetch_commission  NUMERIC,
-       create_time       DATETIME
+        `Id`              VARCHAR(40) not null comment '编号',
+       `member_id`       VARCHAR(40) DEFAULT NULL comment '会员ID',
+       `total_commission` DOUBLE comment '总共获取佣金',
+       `fetch_commission` DOUBLE comment '总提取佣金',
+       `create_time`     DATETIME comment '创建时间'
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='佣金表';
 alter  table commission
        add constraint PK_commission_Id primary key (Id);
@@ -518,18 +518,18 @@ alter  table commission
 */
 create table  complaint
 (
-       Id                VARCHAR(40) not null,
-       member_id         VARCHAR(40),
-       complaint_type    INTEGER,
-       user_name         VARCHAR(20),
-       mobile_no         VARCHAR(20),
-       user_email        VARCHAR(20),
-       complaint_desc    VARCHAR(300),
-       `STATUS`            VARCHAR(4000),
-       deal_result       VARCHAR(300),
-       deal_time         DATETIME,
-       create_time       DATETIME,
-       deal_name         VARCHAR(50)
+       `Id`              VARCHAR(40) not null comment '编号',
+       `member_id`       VARCHAR(40) DEFAULT NULL comment '会员ID ',
+       `complaint_type`  INT comment '投诉类型  1投诉与建议 2商品配送 3售后服务',
+       `user_name`       VARCHAR(20) DEFAULT NULL comment '联系人',
+       `mobile_no`       VARCHAR(20) DEFAULT NULL comment '联系电话 ',
+       `user_email`      VARCHAR(20) DEFAULT NULL comment '联系邮箱',
+       `complaint_desc`  VARCHAR(300) DEFAULT NULL comment '投诉内容 ',
+       `status`          INT DEFAULT 1 comment '状态1未处理  2已处理',
+       `deal_result`     VARCHAR(300) DEFAULT NULL comment '处理结果',
+       `deal_time`       DATETIME comment '处理时间',
+       `create_time`     DATETIME comment '创建时间',
+       `deal_name`       VARCHAR(50) comment '处理人名称'
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='投诉建议表';
 alter  table complaint
        add constraint PK_complaint_Id primary key (Id);
